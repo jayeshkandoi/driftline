@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Driftline — talk to someone new</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: #0d1117;
+      color: #eef2f7;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================
+       NAVBAR
+    ========================= */
+
+    .navbar {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+      border-bottom: 1px solid #242c38;
+      background: #0d1117;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #eef2f7;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #4fdcc7;
+      box-shadow: 0 0 12px rgba(79, 220, 199, .35);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .nav-link:hover {
+      color: white;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-auth-btn {
+      padding: 8px 14px;
+      border: 1px solid #303b4b;
+      border-radius: 8px;
+      background: transparent;
+      color: #dce5ef;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .nav-auth-btn:hover {
+      background: #18202b;
+    }
+
+    .nav-auth-btn.primary {
+      background: #4fdcc7;
+      border-color: #4fdcc7;
+      color: #071412;
+    }
+
+    .user-badge {
+      display: none;
+      align-items: center;
+      gap: 7px;
+      color: #b8c7d8;
+      font-size: 14px;
+    }
+
+    .user-badge.visible {
+      display: flex;
+    }
+
+    .user-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4fdcc7;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      min-height: calc(100vh - 66px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      align-items: center;
+      padding: 70px 8%;
+    }
+
+    .hero-content {
+      max-width: 620px;
+    }
+
+    .hero h1 {
+      margin: 0 0 25px;
+      font-size: clamp(48px, 5vw, 70px);
+      line-height: .98;
+      letter-spacing: -3px;
+      color: #f1f5f9;
+    }
+
+    .hero-description {
+      max-width: 570px;
+      margin: 0 0 32px;
+      color: #8fa1b8;
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 38px;
+    }
+
+    .start-button {
+      padding: 15px 28px;
+      border: 2px solid #e5fffa;
+      border-radius: 9px;
+      background: #4fdcc7;
+      color: #071412;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .start-button:hover {
+      background: #68e5d2;
+    }
+
+    .demo-note {
+      color: #8fa1b8;
+      font-size: 13px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 48px;
+    }
+
+    .stat strong {
+      display: block;
+      margin-bottom: 7px;
+      color: #f1f5f9;
+      font-size: 21px;
+    }
+
+    .stat span {
+      color: #8fa1b8;
+      font-size: 13px;
+    }
+
+    /* =========================
+       CHAT CARD
+    ========================= */
+
+    .chat-card {
+      width: 100%;
+      max-width: 520px;
+      height: 650px;
+      margin-left: auto;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #2a3544;
+      border-radius: 16px;
+      background: #151c26;
+      box-shadow: 0 25px 70px rgba(0,0,0,.28);
+    }
+
+    .chat-header {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid #293342;
+    }
+
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .connected {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #91a6bd;
+      font-size: 14px;
+    }
+
+    .connected-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #67768a;
+    }
+
+    .connected-dot.online {
+      background: #4fdcc7;
+      box-shadow: 0 0 10px rgba(79,220,199,.4);
+    }
+
+    .demo-window {
+      color: #91a6bd;
+      font-size: 13px;
+    }
+
+    /* =========================
+       CHANNEL BAR
+    ========================= */
+
+    .channel-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid #293342;
+      background: #121923;
+    }
+
+    .channel-label {
+      color: #74859b;
+      font-size: 13px;
+    }
+
+    #channelSelect {
+      flex: 1;
+      padding: 7px 9px;
+      border: 1px solid #303c4d;
+      border-radius: 7px;
+      background: #0c121a;
+      color: #dce5ef;
+      outline: none;
+    }
+
+    /* =========================
+       VIDEO AREA
+    ========================= */
+
+    .video-preview {
+      height: 145px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background:
+        repeating-linear-gradient(
+          135deg,
+          #19212c 0,
+          #19212c 10px,
+          #161e28 10px,
+          #161e28 20px
+        );
+      color: #71839a;
+      font-size: 14px;
+    }
+
+    .camera-off {
+      position: absolute;
+      top: 13px;
+      left: 13px;
+      padding: 5px 9px;
+      border-radius: 7px;
+      background: #0c121a;
+      color: #a8b7c9;
+      font-size: 12px;
+    }
+
+    /* =========================
+       MESSAGES
+    ========================= */
+
+    .messages {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      padding: 18px;
+    }
+
+    .message {
+      width: fit-content;
+      max-width: 78%;
+      padding: 9px 12px;
+      border-radius: 9px;
+      color: #e8eef5;
+      font-size: 14px;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .message.them {
+      background: #202936;
+    }
+
+    .message.me {
+      align-self: flex-end;
+      background: #19463f;
+      color: #d9fff7;
+    }
+
+    .message-author {
+      margin-bottom: 3px;
+      color: #7f92a9;
+      font-size: 11px;
+    }
+
+    .message.me .message-author {
+      color: #8ed3c7;
+    }
+
+    .system-message {
+      align-self: center;
+      color: #6f8095;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .empty-message {
+      margin: auto;
+      color: #6f8095;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* =========================
+       TYPING
+    ========================= */
+
+    .typing {
+      min-height: 20px;
+      padding: 0 18px 5px;
+      color: #6f8095;
+      font-size: 12px;
+    }
+
+    /* =========================
+       INPUT
+    ========================= */
+
+    .chat-input-area {
+      display: flex;
+      gap: 9px;
+      padding: 13px 18px;
+      border-top: 1px solid #293342;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      min-width: 0;
+      padding: 11px 13px;
+      border: 1px solid #2e3949;
+      border-radius: 8px;
+      background: #0d131b;
+      color: white;
+      outline: none;
+    }
+
+    .chat-input-area input:focus {
+      border-color: #4fdcc7;
+    }
+
+    .chat-input-area input:disabled {
+      opacity: .5;
+    }
+
+    .send-button {
+      padding: 0 17px;
+      border: 1px solid #344254;
+      border-radius: 8px;
+      background: #141d28;
+      color: #dce5ef;
+    }
+
+    .send-button:hover:not(:disabled) {
+      background: #1c2837;
+    }
+
+    .send-button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    /* =========================
+       AUTH MODAL
+    ========================= */
+
+    .auth-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(2,6,11,.82);
+      backdrop-filter: blur(5px);
+    }
+
+    .auth-modal.hidden {
+      display: none;
+    }
+
+    .auth-card {
+      position: relative;
+      width: min(420px,100%);
+      padding: 30px;
+      border: 1px solid #303b4b;
+      border-radius: 16px;
+      background: #111720;
+      box-shadow: 0 30px 100px rgba(0,0,0,.55);
+    }
+
+    .auth-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      width: 35px;
+      height: 35px;
+      border: 0;
+      background: transparent;
+      color: #8fa1b8;
+      font-size: 28px;
+    }
+
+    .auth-close:hover {
+      color: white;
+    }
+
+    .auth-card h2 {
+      margin: 0 0 7px;
+      color: #f4f7fb;
+      font-size: 27px;
+    }
+
+    .auth-subtitle {
+      margin: 0 0 25px;
+      color: #8fa1b8;
+      font-size: 14px;
+    }
+
+    .auth-card label {
+      display: block;
+      margin: 17px 0 7px;
+      color: #dbe4f0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .auth-card input {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #303d4f;
+      border-radius: 8px;
+      background: #0b1017;
+      color: white;
+      outline: none;
+    }
+
+    .auth-card input:focus {
+      border-color: #4fdcc7;
+    }
+
+    .auth-error {
+      min-height: 20px;
+      margin-top: 12px;
+      color: #ff7f8c;
+      font-size: 13px;
+    }
+
+    .auth-submit {
+      width: 100%;
+      margin-top: 20px;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      background: #4fdcc7;
+      color: #071412;
+      font-weight: 700;
+    }
+
+    .auth-submit:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .auth-switch {
+      margin: 20px 0 0;
+      text-align: center;
+      color: #8fa1b8;
+      font-size: 14px;
+    }
+
+    .auth-switch button {
+      border: 0;
+      background: transparent;
+      color: #4fdcc7;
+      font-weight: 600;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 2000;
+      max-width: 350px;
+      padding: 12px 16px;
+      border: 1px solid #354256;
+      border-radius: 9px;
+      background: #151d28;
+      color: #dce5ef;
+      font-size: 14px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.4);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: .2s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.error {
+      border-color: #743943;
+      color: #ffb4bc;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 55px 6%;
+      }
+
+      .chat-card {
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 14px 5%;
+      }
+
+      .nav-link {
+        display: none;
+      }
+
+      .nav-right {
+        gap: 8px;
+      }
+
+      .user-badge {
+        display: none !important;
+      }
+
+      .hero {
+        padding: 40px 5%;
+      }
+
+      .hero h1 {
+        font-size: 46px;
+        letter-spacing: -2px;
+      }
+
+      .hero-actions {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .stats {
+        gap: 25px;
+      }
+
+      .stat strong {
+        font-size: 18px;
+      }
+
+      .chat-card {
+        height: 620px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       NAVBAR
+  ========================== -->
+
+  <nav class="navbar">
+
+    <a href="#" class="brand">
+      <span class="brand-dot"></span>
+      Driftline
+    </a>
+
+    <div class="nav-right">
+
+      <a href="#how" class="nav-link">How it works</a>
+      <a href="#safety" class="nav-link">Safety</a>
+
+      <div class="user-badge" id="userBadge">
+        <span class="user-dot"></span>
+        <span id="userBadgeName"></span>
+      </div>
+
+      <div class="auth-buttons">
+        <button id="loginBtn" class="nav-auth-btn" type="button">
+          Log in
+        </button>
+
+        <button id="registerBtn" class="nav-auth-btn primary" type="button">
+          Register
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+
+  <!-- =========================
+       HERO
+  ========================== -->
+
+  <main class="hero">
+
+    <section class="hero-content">
+
+      <h1>
+        Talk to someone
+        <br>
+        new, right now.
+      </h1>
+
+      <p class="hero-description">
+        Driftline pairs you with another person for a one-on-one
+        chat. No profiles, no feeds, no history — just a
+        conversation, for as long as you both want it.
+      </p>
+
+      <div class="hero-actions">
+
+        <button
+          id="startChatBtn"
+          class="start-button"
+          type="button"
+        >
+          Start a new chat
+        </button>
+
+        <span class="demo-note">
+          Sign in to join the conversation.
+        </span>
+
+      </div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong>Real-time</strong>
+          <span>Socket.IO messaging</span>
+        </div>
+
+        <div class="stat">
+          <strong>Text chat</strong>
+          <span>fast and simple</span>
+        </div>
+
+        <div class="stat">
+          <strong>Leave anytime</strong>
+          <span>one click</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         REAL CHAT
+    ========================== -->
+
+    <section class="chat-card">
+
+      <div class="chat-header">
+
+        <div class="chat-header-left">
+
+          <div class="connected">
+            <span
+              id="connectionDot"
+              class="connected-dot"
+            ></span>
+
+            <span id="connectionText">
+              Not connected
+            </span>
+          </div>
+
+        </div>
+
+        <span id="currentUsername" class="demo-window">
+          Guest
+        </span>
+
+      </div>
+
+
+      <div class="channel-bar">
+
+        <span class="channel-label">
+          Channel
+        </span>
+
+        <select id="channelSelect" disabled>
+          <option value="">
+            Log in to load channels
+          </option>
+        </select>
+
+      </div>
+
+
+      <div class="video-preview">
+
+        <span class="camera-off">
+          Text chat
+        </span>
+
+        Driftline chat
+
+      </div>
+
+
+      <div
+        id="messages"
+        class="messages"
+      >
+
+        <div class="empty-message">
+          Log in to join the chat.
+        </div>
+
+      </div>
+
+
+      <div
+        id="typingIndicator"
+        class="typing"
+      ></div>
+
+
+      <div class="chat-input-area">
+
+        <input
+          id="messageInput"
+          type="text"
+          maxlength="2000"
+          placeholder="Log in to chat..."
+          disabled
+        >
+
+        <button
+          id="sendButton"
+          class="send-button"
+          type="button"
+          disabled
+        >
+          Send
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       AUTH MODAL
+  ========================== -->
+
+  <div
+    id="authModal"
+    class="auth-modal hidden"
+  >
+
+    <div class="auth-card">
+
+      <button
+        id="closeAuth"
+        class="auth-close"
+        type="button"
+      >
+        &times;
+      </button>
+
+      <h2 id="authTitle">
+        Log in
+      </h2>
+
+      <p
+        id="authSubtitle"
+        class="auth-subtitle"
+      >
+        Welcome back to Driftline.
+      </p>
+
+      <form id="authForm">
+
+        <label for="authUsername">
+          Username
+        </label>
+
+        <input
+          id="authUsername"
+          type="text"
+          minlength="3"
+          maxlength="20"
+          pattern="[a-zA-Z0-9_]{3,20}"
+          autocomplete="username"
+          placeholder="your_username"
+          required
+        >
+
+        <label for="authPassword">
+          Password
+        </label>
+
+        <input
+          id="authPassword"
+          type="password"
+          minlength="8"
+          autocomplete="current-password"
+          placeholder="At least 8 characters"
+          required
+        >
+
+        <div
+          id="authError"
+          class="auth-error"
+        ></div>
+
+        <button
+          id="authSubmit"
+          class="auth-submit"
+          type="submit"
+        >
+          Log in
+        </button>
+
+      </form>
+
+      <p class="auth-switch">
+
+        <span id="authSwitchText">
+          Don't have an account?
+        </span>
+
+        <button
+          id="authSwitch"
+          type="button"
+        >
+          Register
+        </button>
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="toast"
+    class="toast"
+  ></div>
+
+
+  <!-- Socket.IO browser client served by Express -->
+  <script src="/socket.io/socket.io.js"></script>
+
+
+  <script>
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    let socket = null;
+    let currentUser = null;
+    let currentChannelId = null;
+    let channels = [];
+    let typingTimer = null;
+
+
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
+
+    const authModal =
+      document.getElementById("authModal");
+
+    const authForm =
+      document.getElementById("authForm");
+
+    const authTitle =
+      document.getElementById("authTitle");
+
+    const authSubtitle =
+      document.getElementById("authSubtitle");
+
+    const authSubmit =
+      document.getElementById("authSubmit");
+
+    const authSwitch =
+      document.getElementById("authSwitch");
+
+    const authSwitchText =
+      document.getElementById("authSwitchText");
+
+    const authError =
+      document.getElementById("authError");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const registerBtn =
+      document.getElementById("registerBtn");
+
+    const closeAuth =
+      document.getElementById("closeAuth");
+
+    const userBadge =
+      document.getElementById("userBadge");
+
+    const userBadgeName =
+      document.getElementById("userBadgeName");
+
+    const currentUsername =
+      document.getElementById("currentUsername");
+
+    const channelSelect =
+      document.getElementById("channelSelect");
+
+    const messages =
+      document.getElementById("messages");
+
+    const messageInput =
+      document.getElementById("messageInput");
+
+    const sendButton =
+      document.getElementById("sendButton");
+
+    const connectionDot =
+      document.getElementById("connectionDot");
+
+    const connectionText =
+      document.getElementById("connectionText");
+
+    const typingIndicator =
+      document.getElementById("typingIndicator");
+
+    const startChatBtn =
+      document.getElementById("startChatBtn");
+
+    const toast =
+      document.getElementById("toast");
+
+
+    /* =========================================================
+       TOAST
+    ========================================================= */
+
+    let toastTimer = null;
+
+    function showToast(message, isError = false) {
+
+      toast.textContent = message;
+
+      toast.classList.toggle(
+        "error",
+        isError
+      );
+
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3500);
+    }
+
+
+    /* =========================================================
+       AUTH MODAL
+    ========================================================= */
+
+    let authMode = "login";
+
+    function openAuth(mode) {
+
+      authMode = mode;
+
+      authForm.reset();
+
+      authError.textContent = "";
+
+      if (mode === "login") {
+
+        authTitle.textContent =
+          "Log in";
+
+        authSubtitle.textContent =
+          "Welcome back to Driftline.";
+
+        authSubmit.textContent =
+          "Log in";
+
+        authSwitchText.textContent =
+          "Don't have an account?";
+
+        authSwitch.textContent =
+          "Register";
+
+      } else {
+
+        authTitle.textContent =
+          "Create your account";
+
+        authSubtitle.textContent =
+          "Create an account to start chatting.";
+
+        authSubmit.textContent =
+          "Create account";
+
+        authSwitchText.textContent =
+          "Already have an account?";
+
+        authSwitch.textContent =
+          "Log in";
+      }
+
+      authModal.classList.remove("hidden");
+
+      setTimeout(() => {
+        document
+          .getElementById("authUsername")
+          .focus();
+      }, 50);
+    }
+
+
+    function closeAuthModal() {
+      authModal.classList.add("hidden");
+      authError.textContent = "";
+    }
+
+
+    loginBtn.addEventListener(
+      "click",
+      () => {
+
+        if (currentUser) {
+          logout();
+        } else {
+          openAuth("login");
+        }
+
+      }
+    );
+
+
+    registerBtn.addEventListener(
+      "click",
+      () => {
+
+        if (currentUser) {
+          logout();
+        } else {
+          openAuth("register");
+        }
+
+      }
+    );
+
+
+    authSwitch.addEventListener(
+      "click",
+      () => {
+
+        openAuth(
+          authMode === "login"
+            ? "register"
+            : "login"
+        );
+
+      }
+    );
+
+
+    closeAuth.addEventListener(
+      "click",
+      closeAuthModal
+    );
+
+
+    authModal.addEventListener(
+      "click",
+      (event) => {
+
+        if (event.target === authModal) {
+          closeAuthModal();
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.key === "Escape" &&
+          !authModal.classList.contains("hidden")
+        ) {
+          closeAuthModal();
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       AUTH REQUEST
+    ========================================================= */
+
+    authForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+        authError.textContent = "";
+
+        const username =
+          document
+            .getElementById("authUsername")
+            .value
+            .trim();
+
+        const password =
+          document
+            .getElementById("authPassword")
+            .value;
+
+
+        if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)) {
+
+          authError.textContent =
+            "Username must be 3-20 letters, numbers or underscores.";
+
+          return;
+        }
+
+
+        if (password.length < 8) {
+
+          authError.textContent =
+            "Password must be at least 8 characters.";
+
+          return;
+        }
+
+
+        const endpoint =
+          authMode === "login"
+            ? "/api/auth/login"
+            : "/api/auth/register";
+
+
+        authSubmit.disabled = true;
+
+        authSubmit.textContent =
+          authMode === "login"
+            ? "Logging in..."
+            : "Creating account...";
+
+
+        try {
+
+          const response =
+            await fetch(endpoint, {
+
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                username,
+                password
+              })
+
+            });
+
+
+          const data =
+            await response.json();
+
+
+          if (!response.ok) {
+            throw new Error(
+              data.error ||
+              "Authentication failed."
+            );
+          }
+
+
+          localStorage.setItem(
+            "driftline_token",
+            data.token
+          );
+
+
+          localStorage.setItem(
+            "driftline_user",
+            JSON.stringify(data.user)
+          );
+
+
+          closeAuthModal();
+
+          setAuthenticatedUser(
+            data.user
+          );
+
+
+          showToast(
+            authMode === "login"
+              ? "Welcome back."
+              : "Account created successfully."
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Authentication error:",
+            error
+          );
+
+          authError.textContent =
+            error.message ||
+            "Unable to connect to the server.";
+
+        } finally {
+
+          authSubmit.disabled = false;
+
+          authSubmit.textContent =
+            authMode === "login"
+              ? "Log in"
+              : "Create account";
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       SET AUTHENTICATED USER
+    ========================================================= */
+
+    async function setAuthenticatedUser(user) {
+
+      currentUser = user;
+
+      userBadgeName.textContent =
+        user.username;
+
+      currentUsername.textContent =
+        user.username;
+
+      userBadge.classList.add(
+        "visible"
+      );
+
+      loginBtn.textContent =
+        "Account";
+
+      registerBtn.textContent =
+        "Log out";
+
+
+      messageInput.disabled = false;
+
+      sendButton.disabled = false;
+
+      messageInput.placeholder =
+        "Type a message...";
+
+
+      await loadChannels();
+
+      connectSocket();
+    }
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+
+    function logout() {
+
+      if (socket) {
+
+        if (currentChannelId) {
+
+          socket.emit(
+            "leave_channel",
+            {
+              channelId:
+                currentChannelId
+            }
+          );
+        }
+
+        socket.disconnect();
+
+        socket = null;
+      }
+
+
+      currentUser = null;
+
+      currentChannelId = null;
+
+      channels = [];
+
+
+      localStorage.removeItem(
+        "driftline_token"
+      );
+
+      localStorage.removeItem(
+        "driftline_user"
+      );
+
+
+      userBadge.classList.remove(
+        "visible"
+      );
+
+      userBadgeName.textContent = "";
+
+      currentUsername.textContent =
+        "Guest";
+
+      loginBtn.textContent =
+        "Log in";
+
+      registerBtn.textContent =
+        "Register";
+
+
+      channelSelect.innerHTML =
+        `<option value="">
+          Log in to load channels
+        </option>`;
+
+      channelSelect.disabled = true;
+
+
+      messageInput.disabled = true;
+
+      sendButton.disabled = true;
+
+      messageInput.value = "";
+
+      messageInput.placeholder =
+        "Log in to chat...";
+
+
+      messages.innerHTML =
+        `<div class="empty-message">
+          Log in to join the chat.
+        </div>`;
+
+
+      setConnectionStatus(
+        false,
+        "Not connected"
+      );
+
+      typingIndicator.textContent = "";
+
+      showToast(
+        "You have been logged out."
+      );
+    }
+
+
+    /* =========================================================
+       LOAD CHANNELS
+    ========================================================= */
+
+    async function loadChannels() {
+
+      const token =
+        localStorage.getItem(
+          "driftline_token"
+        );
+
+      if (!token) return;
+
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/channels",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            "Unable to load channels."
+          );
+        }
+
+
+        channels =
+          Array.isArray(data.channels)
+            ? data.channels
+            : [];
+
+
+        channelSelect.innerHTML = "";
+
+
+        if (channels.length === 0) {
+
+          channelSelect.innerHTML =
+            `<option value="">
+              No channels available
+            </option>`;
+
+          channelSelect.disabled = true;
+
+          messages.innerHTML =
+            `<div class="empty-message">
+              There are no channels yet.
+            </div>`;
+
+          return;
+        }
+
+
+        for (const channel of channels) {
+
+          const option =
+            document.createElement("option");
+
+          option.value =
+            channel.id;
+
+          option.textContent =
+            `# ${channel.name}`;
+
+          channelSelect.appendChild(
+            option
+          );
+        }
+
+
+        channelSelect.disabled = false;
+
+
+        /*
+         * Prefer #general.
+         */
+
+        const general =
+          channels.find(
+            channel =>
+              channel.name === "general"
+          );
+
+
+        const selected =
+          general || channels[0];
+
+
+        channelSelect.value =
+          selected.id;
+
+
+        await selectChannel(
+          selected.id
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Channel loading error:",
+          error
+        );
+
+        showToast(
+          error.message ||
+          "Unable to load channels.",
+          true
+        );
+      }
+    }
+
+
+    /* =========================================================
+       SELECT CHANNEL
+    ========================================================= */
+
+    channelSelect.addEventListener(
+      "change",
+      async () => {
+
+        const channelId =
+          Number(channelSelect.value);
+
+        if (!channelId) return;
+
+        await selectChannel(
+          channelId
+        );
+
+      }
+    );
+
+
+    async function selectChannel(channelId) {
+
+      if (!currentUser) return;
+
+
+      if (
+        socket &&
+        socket.connected &&
+        currentChannelId &&
+        currentChannelId !== channelId
+      ) {
+
+        socket.emit(
+          "leave_channel",
+          {
+            channelId:
+              currentChannelId
+          }
+        );
+      }
+
+
+      currentChannelId =
+        Number(channelId);
+
+
+      clearMessages();
+
+
+      await loadMessageHistory(
+        currentChannelId
+      );
+
+
+      if (
+        socket &&
+        socket.connected
+      ) {
+
+        socket.emit(
+          "join_channel",
+          {
+            channelId:
+              currentChannelId
+          }
+        );
+      }
+
+    }
+
+
+    /* =========================================================
+       MESSAGE HISTORY
+    ========================================================= */
+
+    async function loadMessageHistory(
+      channelId
+    ) {
+
+      const token =
+        localStorage.getItem(
+          "driftline_token"
+        );
+
+      if (!token) return;
+
+
+      try {
+
+        const response =
+          await fetch(
+            `/api/channels/${channelId}/messages`,
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            "Unable to load messages."
+          );
+        }
+
+
+        clearMessages();
+
+
+        const history =
+          Array.isArray(data.messages)
+            ? data.messages
+            : [];
+
+
+        if (history.length === 0) {
+
+          showEmptyMessages(
+            "No messages yet. Say hello."
+          );
+
+          return;
+        }
+
+
+        for (const message of history) {
+          renderMessage(message);
+        }
+
+
+        scrollMessagesToBottom();
+
+
+      } catch (error) {
+
+        console.error(
+          "Message history error:",
+          error
+        );
+
+        showToast(
+          error.message ||
+          "Unable to load message history.",
+          true
+        );
+      }
+    }
+
+
+    /* =========================================================
+       SOCKET.IO
+    ========================================================= */
+
+    function connectSocket() {
+
+      const token =
+        localStorage.getItem(
+          "driftline_token"
+        );
+
+      if (!token) return;
+
+
+      if (socket) {
+        socket.disconnect();
+      }
+
+
+      setConnectionStatus(
+        false,
+        "Connecting..."
+      );
+
+
+      socket = io(
+        window.location.origin,
+        {
+          auth: {
+            token
+          }
+        }
+      );
+
+
+      socket.on(
+        "connect",
+        () => {
+
+          setConnectionStatus(
+            true,
+            "Connected"
+          );
+
+
+          if (currentChannelId) {
+
+            socket.emit(
+              "join_channel",
+              {
+                channelId:
+                  currentChannelId
+              }
+            );
+          }
+
+        }
+      );
+
+
+      socket.on(
+        "disconnect",
+        () => {
+
+          setConnectionStatus(
+            false,
+            "Disconnected"
+          );
+
+        }
+      );
+
+
+      socket.on(
+        "connect_error",
+        (error) => {
+
+          console.error(
+            "Socket connection error:",
+            error
+          );
+
+          setConnectionStatus(
+            false,
+            "Connection failed"
+          );
+
+
+          if (
+            error.message ===
+            "unauthorized"
+          ) {
+
+            showToast(
+              "Your session is no longer valid. Please log in again.",
+              true
+            );
+
+            logout();
+          }
+
+        }
+      );
+
+
+      /* =========================
+         RECEIVE MESSAGE
+      ========================= */
+
+      socket.on(
+        "message",
+        (message) => {
+
+          if (
+            Number(message.channelId) !==
+            Number(currentChannelId)
+          ) {
+            return;
+          }
+
+
+          const empty =
+            messages.querySelector(
+              ".empty-message"
+            );
+
+          if (empty) {
+            empty.remove();
+          }
+
+
+          renderMessage(message);
+
+          scrollMessagesToBottom();
+        }
+      );
+
+
+      /* =========================
+         PRESENCE
+      ========================= */
+
+      socket.on(
+        "presence",
+        (data) => {
+
+          if (!data) return;
+
+
+          if (
+            data.type === "joined"
+          ) {
+
+            addSystemMessage(
+              `${data.username} joined the channel.`
+            );
+
+          }
+
+
+          if (
+            data.type === "left"
+          ) {
+
+            addSystemMessage(
+              `${data.username} left the channel.`
+            );
+
+          }
+
+        }
+      );
+
+
+      /* =========================
+         TYPING
+      ========================= */
+
+      socket.on(
+        "typing",
+        (data) => {
+
+          if (!data) return;
+
+          if (
+            currentUser &&
+            data.userId === currentUser.id
+          ) {
+            return;
+          }
+
+
+          typingIndicator.textContent =
+            `${data.username} is typing...`;
+
+
+          clearTimeout(
+            typingTimer
+          );
+
+
+          typingTimer =
+            setTimeout(() => {
+
+              typingIndicator.textContent =
+                "";
+
+            }, 1500);
+
+        }
+      );
+
+
+      /* =========================
+         SERVER ERRORS
+      ========================= */
+
+      socket.on(
+        "error_message",
+        (data) => {
+
+          console.error(
+            "Chat error:",
+            data
+          );
+
+
+          showToast(
+            data?.error ||
+            "Something went wrong.",
+            true
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       CONNECTION STATUS
+    ========================================================= */
+
+    function setConnectionStatus(
+      online,
+      text
+    ) {
+
+      connectionDot.classList.toggle(
+        "online",
+        online
+      );
+
+      connectionText.textContent =
+        text;
+    }
+
+
+    /* =========================================================
+       SEND MESSAGE
+    ========================================================= */
+
+    function sendMessage() {
+
+      const content =
+        messageInput.value.trim();
+
+
+      if (!content) return;
+
+
+      if (!currentUser) {
+
+        openAuth("login");
+
+        return;
+      }
+
+
+      if (
+        !socket ||
+        !socket.connected
+      ) {
+
+        showToast(
+          "Not connected to chat.",
+          true
+        );
+
+        return;
+      }
+
+
+      if (!currentChannelId) {
+
+        showToast(
+          "Please select a channel.",
+          true
+        );
+
+        return;
+      }
+
+
+      socket.emit(
+        "send_message",
+        {
+          channelId:
+            currentChannelId,
+
+          content
+        }
+      );
+
+
+      messageInput.value = "";
+    }
+
+
+    sendButton.addEventListener(
+      "click",
+      sendMessage
+    );
+
+
+    messageInput.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.key === "Enter" &&
+          !event.shiftKey
+        ) {
+
+          event.preventDefault();
+
+          sendMessage();
+
+          return;
+        }
+
+
+        if (
+          socket &&
+          socket.connected &&
+          currentChannelId &&
+          currentUser
+        ) {
+
+          socket.emit(
+            "typing",
+            {
+              channelId:
+                currentChannelId
+            }
+          );
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       RENDER MESSAGE
+    ========================================================= */
+
+    function renderMessage(message) {
+
+      if (!message) return;
+
+
+      const element =
+        document.createElement("div");
+
+
+      const isMine =
+        currentUser &&
+        message.author &&
+        Number(message.author.id) ===
+          Number(currentUser.id);
+
+
+      element.className =
+        `message ${
+          isMine ? "me" : "them"
+        }`;
+
+
+      if (message.deleted) {
+
+        element.textContent =
+          "Message deleted";
+
+        return messages.appendChild(
+          element
+        );
+      }
+
+
+      const author =
+        document.createElement("div");
+
+      author.className =
+        "message-author";
+
+      author.textContent =
+        message.author?.username ||
+        "Unknown";
+
+
+      const content =
+        document.createElement("div");
+
+      content.textContent =
+        message.content || "";
+
+
+      element.appendChild(
+        author
+      );
+
+      element.appendChild(
+        content
+      );
+
+
+      messages.appendChild(
+        element
+      );
+    }
+
+
+    /* =========================================================
+       SYSTEM MESSAGE
+    ========================================================= */
+
+    function addSystemMessage(text) {
+
+      const element =
+        document.createElement("div");
+
+      element.className =
+        "system-message";
+
+      element.textContent =
+        text;
+
+      messages.appendChild(
+        element
+      );
+
+      scrollMessagesToBottom();
+    }
+
+
+    /* =========================================================
+       MESSAGE UI HELPERS
+    ========================================================= */
+
+    function clearMessages() {
+
+      messages.innerHTML = "";
+    }
+
+
+    function showEmptyMessages(text) {
+
+      messages.innerHTML =
+        `<div class="empty-message"></div>`;
+
+      messages
+        .querySelector(".empty-message")
+        .textContent = text;
+    }
+
+
+    function scrollMessagesToBottom() {
+
+      requestAnimationFrame(() => {
+
+        messages.scrollTop =
+          messages.scrollHeight;
+
+      });
+    }
+
+
+    /* =========================================================
+       START CHAT
+    ========================================================= */
+
+    startChatBtn.addEventListener(
+      "click",
+      async () => {
+
+        if (!currentUser) {
+
+          openAuth("login");
+
+          return;
+        }
+
+
+        if (!currentChannelId) {
+
+          await loadChannels();
+
+          return;
+        }
+
+
+        messageInput.focus();
+
+        showToast(
+          "You're ready to chat."
+        );
+      }
+    );
+
+
+    /* =========================================================
+       RESTORE SESSION
+    ========================================================= */
+
+    async function restoreSession() {
+
+      const token =
+        localStorage.getItem(
+          "driftline_token"
+        );
+
+      const savedUser =
+        localStorage.getItem(
+          "driftline_user"
+        );
+
+
+      if (!token || !savedUser) {
+
+        setConnectionStatus(
+          false,
+          "Not connected"
+        );
+
+        return;
+      }
+
+
+      try {
+
+        const user =
+          JSON.parse(savedUser);
+
+        await setAuthenticatedUser(
+          user
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Session restore failed:",
+          error
+        );
+
+        localStorage.removeItem(
+          "driftline_token"
+        );
+
+        localStorage.removeItem(
+          "driftline_user"
+        );
+
+      }
+    }
+
+
+    /* =========================================================
+       INITIALIZE
+    ========================================================= */
+
+    restoreSession();
+
+  </script>
+
+</body>
+</html>
